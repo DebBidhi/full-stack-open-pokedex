@@ -17,8 +17,6 @@ const PokemonPage = ({ previous, next }) => {
   if (error) {
     return <ErrorMessage error={error} />
   }
-
-  const { type } = pokemon.types.find((type) => type.slot === 1)
   const stats = pokemon.stats.map((stat) => ({
     name: formatName(stat.stat.name),
     value: stat.base_stat
@@ -27,14 +25,17 @@ const PokemonPage = ({ previous, next }) => {
   const hiddenAbility = pokemon.abilities.find((ability) => ability.is_hidden === true)
 
   // console.log('hiddenAbility=', hiddenAbility)
+  // Assuming pokemon.types is an array and we're interested in the first type
+  const type = pokemon.types && pokemon.types.length > 0 ? pokemon.types[0].type : null
+
   return (
     <>
       <div className="links">
         {previous && <Link to={`/pokemon/${previous.name}`}>Previous</Link>}
         <Link to="/">Home</Link>
-        {next && <Link to={`/pokemon/${previous.name}`}>Next</Link>}
+        {next && <Link to={`/pokemon/${next.name}`}>Next</Link>} {/* Fixed typo from previous.name to next.name */}
       </div>
-      <div className={`pokemon-page pokemon-type-${type.name}`}>
+      <div className={`pokemon-page ${type ? `pokemon-type-${type.name}` : ''}`}>
         <div className="pokemon-image" style={{ backgroundImage: `url(${pokemon.sprites.front_default})` }} />
         <div className="pokemon-info">
           <div className="pokemon-name">{pokemon.name}</div>
